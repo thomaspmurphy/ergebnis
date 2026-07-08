@@ -98,14 +98,16 @@ defmodule Ergebnis do
     e -> {:error, e}
   end
 
-  # Type checker demo: this warns at compile time in 1.17+
-  # "the following clause will never match" because val is {:error, :oops}
-  # (Works for locally inferred types; cross-function checking requires @spec enforcement, a future milestone.)
-  def type_check_demo do
-    val = {:error, :oops}
-
-    case val do
-      {:ok, v} -> v * 2
-    end
-  end
+  # Exhaustiveness demo — uncomment to see the 1.17+ type checker in action.
+  # Emits: "the following clause will never match: {:ok, v}"
+  # because the checker infers val :: {:error, :oops} and can prove the arm is dead.
+  # Note: only fires for locally-inferred types; cross-function checking requires
+  # @spec enforcement, which is a planned future milestone.
+  #
+  # def type_check_demo do
+  #   val = {:error, :oops}
+  #   case val do
+  #     {:ok, v} -> v * 2
+  #   end
+  # end
 end
